@@ -1,1 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Red Arena 🔴</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <style>
+    body {
+      background: #7b0000;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #ff4d4d;
+    }
+
+    .box {
+      background: #400000;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    button {
+      background: #ff1a1a;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      margin: 5px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #cc0000;
+    }
+
+    .log {
+      margin-top: 15px;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🔴 RED ARENA 🔴</h1>
+  <p>Two players enter. One survives.</p>
+
+  <div class="box">
+    <h3>Player A ❤️ <span id="hpA">100</span></h3>
+    <h3>Player B ❤️ <span id="hpB">100</span></h3>
+  </div>
+
+  <div class="box">
+    <button onclick="attack()">🥊 Punch</button>
+    <button onclick="kick()">🦵 Kick</button>
+    <button onclick="special()">💣 Special</button>
+  </div>
+
+  <div class="log" id="log">Fight starts! 🔥</div>
+
+  <script src="https://telegram.org/js/games.js"></script>
+
+  <script>
+    let hpA = 100;
+    let hpB = 100;
+    let turn = 'A';
+    let specialUsed = false;
+
+    function update() {
+      document.getElementById("hpA").innerText = hpA;
+      document.getElementById("hpB").innerText = hpB;
+    }
+
+    function log(msg) {
+      document.getElementById("log").innerText = msg;
+    }
+
+    function checkWin() {
+      if (hpA <= 0) {
+        log("💀 Player A is DOWN! Player B WINS 🔥");
+        TelegramGameProxy.shareScore();
+      }
+      if (hpB <= 0) {
+        log("💀 Player B is DOWN! Player A WINS 🔥");
+        TelegramGameProxy.shareScore();
+      }
+    }
+
+    function attack() {
+      if (turn === 'A') {
+        hpB -= 10;
+        log("🥊 Player A punched! That hurt 😵");
+        turn = 'B';
+      } else {
+        hpA -= 10;
+        log("🥊 Player B punched! Savage hit 🔥");
+        turn = 'A';
+      }
+      update(); checkWin();
+    }
+
+    function kick() {
+      let success = Math.random() < 0.7;
+      if (!success) {
+        log("❌ Kick missed! Embarrassing 😆");
+        turn = turn === 'A' ? 'B' : 'A';
+        return;
+      }
+
+      if (turn === 'A') {
+        hpB -= 15;
+        log("🦵 Player A landed a kick! OOF!");
+        turn = 'B';
+      } else {
+        hpA -= 15;
+        log("🦵 Player B landed a kick! Brutal!");
+        turn = 'A';
+      }
+      update(); checkWin();
+    }
+
+    function special() {
+      if (specialUsed) {
+        log("💣 Special already used! No cheating 😜");
+        return;
+      }
+      specialUsed = true;
+
+      if (turn === 'A') {
+        hpB -= 25;
+        log("💣 Player A used SPECIAL! Absolute destruction 🔥");
+        turn = 'B';
+      } else {
+        hpA -= 25;
+        log("💣 Player B used SPECIAL! RED ZONE 💀");
+        turn = 'A';
+      }
+      update(); checkWin();
+    }
+  </script>
+
+</body>
+</html>
