@@ -1,1 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will You Be My Valentine? 🏸💖</title>
 
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Comic Sans MS", "Poppins", cursive;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #ffd6e8, #e0f7fa);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.container {
+  background: white;
+  padding: 40px;
+  border-radius: 30px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  max-width: 420px;
+}
+
+h1 {
+  font-size: 2.3rem;
+}
+
+.question {
+  font-size: 1.4rem;
+}
+
+.question span {
+  color: #ff4d88;
+  font-weight: bold;
+}
+
+.shuttlecock {
+  font-size: 4rem;
+  margin: 20px 0;
+  animation: bounce 1.2s infinite;
+}
+
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.buttons {
+  position: relative;
+  height: 90px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+}
+
+#yesBtn {
+  background: #ff4d88;
+  color: white;
+  transition: transform 0.3s;
+}
+
+#yesBtn:hover {
+  transform: scale(1.15);
+}
+
+#noBtn {
+  background: #ddd;
+  position: absolute;
+  transition: left 0.15s ease, top 0.15s ease;
+}
+
+.shake {
+  animation: shake 0.3s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+#response {
+  margin-top: 20px;
+  font-size: 1.3rem;
+  color: #ff4d88;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🏸 Hey You!</h1>
+  <p class="question">
+    Will you be my <span>Valentine</span>? 💘
+  </p>
+
+  <div class="shuttlecock">🏸</div>
+
+  <div class="buttons">
+    <button id="yesBtn">YES 💖</button>
+    <button id="noBtn">NO 😤</button>
+  </div>
+
+  <p id="response"></p>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const response = document.getElementById("response");
+
+let noCount = 0;
+
+const noTexts = [
+  "NO 😤",
+  "WAIT 😳",
+  "HEY 😭",
+  "STOP 🏸",
+  "PLS 💔",
+  "OK FINE 😩"
+];
+
+noBtn.addEventListener("mouseenter", () => {
+  noCount++;
+
+  noBtn.classList.add("shake");
+  setTimeout(() => noBtn.classList.remove("shake"), 300);
+
+  if (noCount < noTexts.length) {
+    noBtn.textContent = noTexts[noCount];
+  }
+
+  const padding = 20;
+  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+  noBtn.style.left = Math.random() * maxX + "px";
+  noBtn.style.top = Math.random() * maxY + "px";
+
+  if (noCount > 5) {
+    noBtn.style.display = "none";
+    response.innerHTML = "NO left the badminton court 🏸😂<br>Only YES remains 💕";
+  }
+});
+
+yesBtn.addEventListener("click", () => {
+  response.innerHTML = `
+    💖💖💖<br>
+    YAY!! You said YES!!<br>
+    Perfect doubles partners 🏸<br>
+    Happy Valentine’s 😘
+  `;
+  launchConfetti();
+});
+
+function launchConfetti() {
+  for (let i = 0; i < 30; i++) {
+    const item = document.createElement("div");
+    item.textContent = Math.random() > 0.5 ? "💖" : "🏸";
+    item.style.position = "fixed";
+    item.style.left = Math.random() * 100 + "vw";
+    item.style.top = "-20px";
+    item.style.fontSize = "24px";
+    item.style.animation = "fall 3s linear forwards";
+    document.body.appendChild(item);
+
+    setTimeout(() => item.remove(), 3000);
+  }
+}
+</script>
+
+</body>
+</html>
